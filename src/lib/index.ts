@@ -1,5 +1,16 @@
-export { crawl } from './crawl';
-export { Push } from './crawl/pusher';
+import { log } from 'logol';
+import { join } from 'path';
 
-export { setDefaultDestination as setDefaultDriversDestination } from 'test-crawler-driver-manager';
+import { consumer, pushToUrlsConsumer } from './crawlerConsumer';
+import { runConsumers, setConsumers } from './consumer';
+import { ROOT_FOLDER, DIST_FOLDER } from './config';
 
+setConsumers({ consumer });
+export async function crawl(url: string, dist?: string) {
+    const distFolder = dist || join(ROOT_FOLDER, DIST_FOLDER);
+    log('input', { url, distFolder });
+    pushToUrlsConsumer(url);
+    // runConsumers(results => {
+    //     console.log('done', results);
+    // });
+}
