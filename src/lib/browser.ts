@@ -1,6 +1,6 @@
 import { launch } from 'puppeteer';
 import { info } from 'logol';
-import { USER_AGENT, TIMEOUT, VIEWPORT } from './config';
+import { config } from './config';
 
 export async function browse(
     url: string,
@@ -11,12 +11,12 @@ export async function browse(
 
     try {
         const page = await browser.newPage();
-        await page.setUserAgent(USER_AGENT); // this should be configurable from crawler file _.json
-        VIEWPORT && await page.setViewport(VIEWPORT);
+        await page.setUserAgent(config.userAgent); // this should be configurable from crawler file _.json
+        config.viewport && await page.setViewport(config.viewport);
 
         await page.goto(url, {
             waitUntil: 'networkidle2',
-            timeout: TIMEOUT,
+            timeout: config.browserTimeout,
         });
         const html = await page.content();
         const links = await page.$$eval('a', as =>

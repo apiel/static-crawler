@@ -1,5 +1,5 @@
 import { Consumer } from './consumer';
-import { CONSUMER_COUNT } from './config';
+import { config } from './config';
 import { browse } from './browser';
 
 const urlsCount = 0;
@@ -9,7 +9,7 @@ export function pushToUrlsConsumer(url: string) {
     urlsQueue.push(url);
 }
 
-const queue = { name: 'browser', maxConcurrent: CONSUMER_COUNT };
+const queue = { name: 'browser', maxConcurrent: config.consumerCount };
 
 export const consumer: Consumer = {
     finish: () => ({ urlsCount }),

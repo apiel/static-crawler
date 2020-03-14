@@ -5,7 +5,7 @@ import { resolve } from 'path';
 import * as minimist from 'minimist';
 import { cosmiconfig } from 'cosmiconfig';
 
-import { crawl, CONFIG_FILE } from '../lib';
+import { crawl, CONFIG_FILE, setConfig } from '../lib';
 
 const cosmiconfigOptions = {
     searchPlaces: [
@@ -21,21 +21,27 @@ async function start() {
     // const { 2: url, 3: destFolder } = process.argv;
     const {
         _: [url, dist],
-        ...params
+        configFile,
+        ...config
     } = minimist(process.argv.slice(2));
     if (!url) {
         console.log(`Usage: static-crawler url [dist]
 
 Options:
-  --config=./config.json
+  --configFile=./config.json
+  --userAgent="My custom user agent"
+  --browserTimeout=10
+  --consumerCount=5
 `);
     } else {
         info('static-crawler');
 
-        const cosmic = params.config
-            ? await cosmiconfig(CONFIG_FILE).load(params.config)
+        const cosmic = configFile
+            ? await cosmiconfig(CONFIG_FILE).load(configFile)
             : await cosmiconfig(CONFIG_FILE, cosmiconfigOptions).search();
-        console.log('cosmic', cosmic);
+
+        setConfig(cosmic?.config);
+        setConfig(config);
         crawl(url, dist);
     }
 }
