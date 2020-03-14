@@ -1,5 +1,6 @@
 import { resolve } from 'path';
 
+export const CONFIG_FILE = 'static-crawler';
 export const ROOT_FOLDER = process.env.ROOT_FOLDER
     ? resolve(process.env.ROOT_FOLDER)
     : process.cwd();
