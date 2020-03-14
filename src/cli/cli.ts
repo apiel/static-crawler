@@ -18,7 +18,6 @@ const cosmiconfigOptions = {
 };
 
 async function start() {
-    // const { 2: url, 3: destFolder } = process.argv;
     const {
         _: [url, dist],
         configFile,
@@ -35,6 +34,8 @@ Options:
 `);
     } else {
         info('static-crawler');
+
+// need to make site folder customizable from config file
 
         const cosmic = configFile
             ? await cosmiconfig(CONFIG_FILE).load(configFile)
