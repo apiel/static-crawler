@@ -1,5 +1,5 @@
-import { join, extname } from 'path';
-import { writeFile, pathExists } from 'fs-extra';
+import { join, extname, dirname } from 'path';
+import { writeFile, pathExists, mkdirp } from 'fs-extra';
 
 import { Consumer } from './consumer';
 import { config, distPath } from './config';
@@ -26,7 +26,9 @@ export const consumer: Consumer = {
         },
     runner: async (url: string) => {
         const { html, links } = await browse(url);
-        await writeFile(getFilePath(url), html);
+        const filePath = getFilePath(url);
+        await mkdirp(dirname(filePath));
+        await writeFile(filePath, html);
 
         for (const link of links) {
             if (!(await pathExists(getFilePath(link)))) {

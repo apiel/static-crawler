@@ -16,7 +16,7 @@ export async function browse(
 
         await page.goto(url, {
             waitUntil: 'networkidle2',
-            timeout: config.browserTimeout,
+            timeout: config.browserTimeout * 1000,
         });
         const html = await page.content();
         const links = await page.$$eval('a', as =>
