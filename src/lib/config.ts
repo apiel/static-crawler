@@ -13,6 +13,7 @@ export let config = {
     consumerCount: 5,
     distFolder: 'site',
     skipLinks: false,
+    ignorePattern: false,
 };
 
 export let distPath = join(ROOT_FOLDER, config.distFolder);

@@ -1,5 +1,6 @@
 import { join, extname, dirname } from 'path';
 import { writeFile, pathExists, mkdirp } from 'fs-extra';
+import * as minimatch from 'minimatch';
 
 import { Consumer } from './consumer';
 import { config, distPath, baseUrl } from './config';
@@ -49,5 +50,8 @@ function getFilePath(urlString: string) {
 }
 
 async function isValidChild(url: string) {
+    if(config.ignorePattern && minimatch(url, config.ignorePattern as any as string)) {
+        return false;
+    }
     return url.indexOf(baseUrl) === 0 && !(await pathExists(getFilePath(url)));
 }
