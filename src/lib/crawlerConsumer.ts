@@ -1,5 +1,8 @@
+import { join, extname } from 'path';
+import { writeFile } from 'fs-extra';
+
 import { Consumer } from './consumer';
-import { config } from './config';
+import { config, distPath } from './config';
 import { browse } from './browser';
 
 const urlsCount = 0;
@@ -22,7 +25,15 @@ export const consumer: Consumer = {
     }),
     runner: async (url: string) => {
         const { html, links } = await browse(url);
-        // await writeFile(htmlFile, html);
+        const filePath = getFilePath(url);
+        await writeFile(filePath, html);
     },
 };
 
+function getFilePath(urlString: string) {
+    const url = new URL(urlString);
+    if (extname(url.pathname).trim() === '') {
+        return join(distPath, url.pathname, 'index.html');
+    }
+    return join(distPath, url.pathname);
+}

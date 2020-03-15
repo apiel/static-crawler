@@ -1,4 +1,4 @@
-import { resolve } from 'path';
+import { resolve, join } from 'path';
 
 export const CONFIG_FILE = 'static-crawler';
 export const ROOT_FOLDER = process.env.ROOT_FOLDER
@@ -14,6 +14,13 @@ export let config = {
     distFolder: 'site',
 };
 
+export let distPath = join(ROOT_FOLDER, config.distFolder);
+
 export function setConfig(newConfig = {}) {
     config = { ...config, ...newConfig };
+    distPath = join(ROOT_FOLDER, config.distFolder);
+}
+
+export function setDistPath(path: string) {
+    distPath = path;
 }
