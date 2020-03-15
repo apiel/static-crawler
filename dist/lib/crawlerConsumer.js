@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const path_1 = require("path");
 const fs_extra_1 = require("fs-extra");
+const minimatch = require("minimatch");
 const config_1 = require("./config");
 const browser_1 = require("./browser");
 const urlsCount = 0;
@@ -54,6 +55,9 @@ function getFilePath(urlString) {
 }
 function isValidChild(url) {
     return __awaiter(this, void 0, void 0, function* () {
+        if (config_1.config.ignorePattern && minimatch(url, config_1.config.ignorePattern)) {
+            return false;
+        }
         return url.indexOf(config_1.baseUrl) === 0 && !(yield fs_extra_1.pathExists(getFilePath(url)));
     });
 }

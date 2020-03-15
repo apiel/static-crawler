@@ -47,6 +47,7 @@ Options:
   --consumerCount=5
   --distFolder=site
   --skipLinks=true
+  --ignorePattern=*/details
 `);
         }
         else {

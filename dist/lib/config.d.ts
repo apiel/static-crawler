@@ -7,6 +7,7 @@ export declare let config: {
     consumerCount: number;
     distFolder: string;
     skipLinks: boolean;
+    ignorePattern: boolean;
 };
 export declare let distPath: string;
 export declare function setConfig(newConfig?: {}): void;
