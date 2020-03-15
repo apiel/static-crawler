@@ -1,7 +1,6 @@
 #!/usr/bin/env node
 
 import { info } from 'logol';
-import { resolve } from 'path';
 import * as minimist from 'minimist';
 import { cosmiconfig } from 'cosmiconfig';
 
@@ -31,11 +30,10 @@ Options:
   --userAgent="My custom user agent"
   --browserTimeout=10
   --consumerCount=5
+  --distFolder=site
 `);
     } else {
         info('static-crawler');
-
-// need to make site folder customizable from config file
 
         const cosmic = configFile
             ? await cosmiconfig(CONFIG_FILE).load(configFile)
