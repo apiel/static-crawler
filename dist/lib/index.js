@@ -21,12 +21,13 @@ exports.setConfig = config_2.setConfig;
 consumer_1.setConsumers({ consumer: crawlerConsumer_1.consumer });
 function crawl(url, dist) {
     return __awaiter(this, void 0, void 0, function* () {
+        config_1.setBaseUrl(url);
         const distPath = path_1.resolve(dist || path_1.join(config_1.ROOT_FOLDER, config_1.config.distFolder));
         config_1.setDistPath(distPath);
         logol_1.log('input', { url, distPath, config: config_1.config });
         crawlerConsumer_1.pushToUrlsConsumer(url);
         consumer_1.runConsumers(results => {
-            console.log('done', results);
+            logol_1.info('done', results);
         });
     });
 }

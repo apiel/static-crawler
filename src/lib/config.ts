@@ -25,3 +25,8 @@ export function setConfig(newConfig = {}) {
 export function setDistPath(path: string) {
     distPath = path;
 }
+
+export let baseUrl = '';
+export function setBaseUrl(url: string) {
+    baseUrl = url;
+}

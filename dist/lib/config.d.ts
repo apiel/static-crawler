@@ -11,3 +11,5 @@ export declare let config: {
 export declare let distPath: string;
 export declare function setConfig(newConfig?: {}): void;
 export declare function setDistPath(path: string): void;
+export declare let baseUrl: string;
+export declare function setBaseUrl(url: string): void;

@@ -23,4 +23,9 @@ function setDistPath(path) {
     exports.distPath = path;
 }
 exports.setDistPath = setDistPath;
+exports.baseUrl = '';
+function setBaseUrl(url) {
+    exports.baseUrl = url;
+}
+exports.setBaseUrl = setBaseUrl;
 //# sourceMappingURL=config.js.map

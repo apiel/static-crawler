@@ -38,7 +38,7 @@ exports.consumer = {
         yield fs_extra_1.writeFile(filePath, html);
         if (!config_1.config.skipLinks) {
             for (const link of links) {
-                if (!(yield fs_extra_1.pathExists(getFilePath(link)))) {
+                if (yield isValidChild(link)) {
                     pushToUrlsConsumer(link);
                 }
             }
@@ -51,5 +51,10 @@ function getFilePath(urlString) {
         return path_1.join(config_1.distPath, url.pathname, 'index.html');
     }
     return path_1.join(config_1.distPath, url.pathname);
+}
+function isValidChild(url) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return url.indexOf(config_1.baseUrl) === 0 && !(yield fs_extra_1.pathExists(getFilePath(url)));
+    });
 }
 //# sourceMappingURL=crawlerConsumer.js.map

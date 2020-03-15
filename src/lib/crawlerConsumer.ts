@@ -2,7 +2,7 @@ import { join, extname, dirname } from 'path';
 import { writeFile, pathExists, mkdirp } from 'fs-extra';
 
 import { Consumer } from './consumer';
-import { config, distPath } from './config';
+import { config, distPath, baseUrl } from './config';
 import { browse } from './browser';
 
 const urlsCount = 0;
@@ -32,7 +32,7 @@ export const consumer: Consumer = {
 
         if (!config.skipLinks) {
             for (const link of links) {
-                if (!(await pathExists(getFilePath(link)))) {
+                if (await isValidChild(link)) {
                     pushToUrlsConsumer(link);
                 }
             }
@@ -46,4 +46,8 @@ function getFilePath(urlString: string) {
         return join(distPath, url.pathname, 'index.html');
     }
     return join(distPath, url.pathname);
+}
+
+async function isValidChild(url: string) {
+    return url.indexOf(baseUrl) === 0 && !(await pathExists(getFilePath(url)));
 }
