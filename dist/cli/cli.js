@@ -9,28 +9,54 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __rest = (this && this.__rest) || function (s, e) {
+    var t = {};
+    for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p) && e.indexOf(p) < 0)
+        t[p] = s[p];
+    if (s != null && typeof Object.getOwnPropertySymbols === "function")
+        for (var i = 0, p = Object.getOwnPropertySymbols(s); i < p.length; i++) {
+            if (e.indexOf(p[i]) < 0 && Object.prototype.propertyIsEnumerable.call(s, p[i]))
+                t[p[i]] = s[p[i]];
+        }
+    return t;
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const logol_1 = require("logol");
-const test_crawler_core_1 = require("test-crawler-core");
-const configs = require("test-crawler-core/lib/config");
+const minimist = require("minimist");
+const cosmiconfig_1 = require("cosmiconfig");
 const lib_1 = require("../lib");
+const cosmiconfigOptions = {
+    searchPlaces: [
+        'package.json',
+        `${lib_1.CONFIG_FILE}.json`,
+        `${lib_1.CONFIG_FILE}.yaml`,
+        `${lib_1.CONFIG_FILE}.yml`,
+        `${lib_1.CONFIG_FILE}.js`,
+    ],
+};
 function start() {
     return __awaiter(this, void 0, void 0, function* () {
-        logol_1.info('Test-crawler');
-        logol_1.info('Config', configs);
-        const [, , option, value] = process.argv;
-        if (option && value) {
-            if (option === '--project') {
-                const crawlTarget = {
-                    projectId: value,
-                    timestamp: test_crawler_core_1.generateTinestampFolder(),
-                };
-                logol_1.info('Start project', crawlTarget);
-                yield lib_1.crawl(crawlTarget);
-                return;
-            }
+        const _a = minimist(process.argv.slice(2)), { _: [url, dist], configFile } = _a, config = __rest(_a, ["_", "configFile"]);
+        if (!url) {
+            console.log(`Usage: static-crawler url [dist]
+
+Options:
+  --configFile=./config.json
+  --userAgent="My custom user agent"
+  --browserTimeout=10
+  --consumerCount=5
+  --distFolder=site
+`);
         }
-        lib_1.crawl(undefined);
+        else {
+            logol_1.info('static-crawler');
+            const cosmic = configFile
+                ? yield cosmiconfig_1.cosmiconfig(lib_1.CONFIG_FILE).load(configFile)
+                : yield cosmiconfig_1.cosmiconfig(lib_1.CONFIG_FILE, cosmiconfigOptions).search();
+            lib_1.setConfig(cosmic === null || cosmic === void 0 ? void 0 : cosmic.config);
+            lib_1.setConfig(config);
+            lib_1.crawl(url, dist);
+        }
     });
 }
 start();

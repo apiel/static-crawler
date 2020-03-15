@@ -10,25 +10,26 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const logol_1 = require("logol");
-const path_1 = require("path");
-const crawlerConsumer_1 = require("./crawlerConsumer");
-const consumer_1 = require("./consumer");
-const config_1 = require("./config");
-var config_2 = require("./config");
-exports.ROOT_FOLDER = config_2.ROOT_FOLDER;
-exports.CONFIG_FILE = config_2.CONFIG_FILE;
-exports.setConfig = config_2.setConfig;
-consumer_1.setConsumers({ consumer: crawlerConsumer_1.consumer });
-function crawl(url, dist) {
+let pushList = [];
+function pushPush(push) {
+    pushList.push(push);
+}
+exports.pushPush = pushPush;
+function sendPush(payload) {
     return __awaiter(this, void 0, void 0, function* () {
-        const distPath = path_1.resolve(dist || path_1.join(config_1.ROOT_FOLDER, config_1.config.distFolder));
-        config_1.setDistPath(distPath);
-        logol_1.log('input', { url, distPath, config: config_1.config });
-        crawlerConsumer_1.pushToUrlsConsumer(url);
-        consumer_1.runConsumers(results => {
-            console.log('done', results);
-        });
+        for (let i = pushList.length - 1; i >= 0; i--) {
+            if (pushList[i]) {
+                try {
+                    yield pushList[i](payload);
+                }
+                catch (error) {
+                    logol_1.info('Push was not sent, remove from pusher list.');
+                    delete pushList[i];
+                }
+            }
+        }
+        pushList = pushList.filter(p => p);
     });
 }
-exports.crawl = crawl;
-//# sourceMappingURL=index.js.map
+exports.sendPush = sendPush;
+//# sourceMappingURL=pusher.js.map

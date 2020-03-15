@@ -9,26 +9,32 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const puppeteer_1 = require("puppeteer");
 const logol_1 = require("logol");
-const path_1 = require("path");
-const crawlerConsumer_1 = require("./crawlerConsumer");
-const consumer_1 = require("./consumer");
 const config_1 = require("./config");
-var config_2 = require("./config");
-exports.ROOT_FOLDER = config_2.ROOT_FOLDER;
-exports.CONFIG_FILE = config_2.CONFIG_FILE;
-exports.setConfig = config_2.setConfig;
-consumer_1.setConsumers({ consumer: crawlerConsumer_1.consumer });
-function crawl(url, dist) {
+function browse(url) {
     return __awaiter(this, void 0, void 0, function* () {
-        const distPath = path_1.resolve(dist || path_1.join(config_1.ROOT_FOLDER, config_1.config.distFolder));
-        config_1.setDistPath(distPath);
-        logol_1.log('input', { url, distPath, config: config_1.config });
-        crawlerConsumer_1.pushToUrlsConsumer(url);
-        consumer_1.runConsumers(results => {
-            console.log('done', results);
-        });
+        const browser = yield puppeteer_1.launch({});
+        try {
+            const page = yield browser.newPage();
+            yield page.setUserAgent(config_1.config.userAgent);
+            config_1.config.viewport && (yield page.setViewport(config_1.config.viewport));
+            yield page.goto(url, {
+                waitUntil: 'networkidle2',
+                timeout: config_1.config.browserTimeout * 1000,
+            });
+            const html = yield page.content();
+            const links = yield page.$$eval('a', as => as.map(a => a.href));
+            return {
+                links,
+                html,
+            };
+        }
+        finally {
+            yield browser.close();
+            logol_1.info('browser closed', url);
+        }
     });
 }
-exports.crawl = crawl;
-//# sourceMappingURL=index.js.map
+exports.browse = browse;
+//# sourceMappingURL=browser.js.map

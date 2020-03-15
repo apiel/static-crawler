@@ -1,3 +1,2 @@
-export { crawl } from './crawl';
-export { Push } from './crawl/pusher';
-export { setDefaultDestination as setDefaultDriversDestination } from 'test-crawler-driver-manager';
+export { ROOT_FOLDER, CONFIG_FILE, setConfig } from './config';
+export declare function crawl(url: string, dist?: string): Promise<void>;
