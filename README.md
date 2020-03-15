@@ -1,6 +1,6 @@
 # static-crawler
 
-Use static-crawler to generate static html version of a single page application using React, VueJs or Angular. No matter of the framework you are using, this tool will work with most of them, since it is using puppeteer to render the pages.
+Use static-crawler to generate static html version of a single page application. No matter of the framework you are using, React, VueJs, Angular and others, this tool will work with most of them, since it is using puppeteer to render the pages.
 
 ```
 npx static-crawler url [dist]
