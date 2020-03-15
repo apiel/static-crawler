@@ -36,9 +36,11 @@ exports.consumer = {
         const filePath = getFilePath(url);
         yield fs_extra_1.mkdirp(path_1.dirname(filePath));
         yield fs_extra_1.writeFile(filePath, html);
-        for (const link of links) {
-            if (!(yield fs_extra_1.pathExists(getFilePath(link)))) {
-                pushToUrlsConsumer(link);
+        if (!config_1.config.skipLinks) {
+            for (const link of links) {
+                if (!(yield fs_extra_1.pathExists(getFilePath(link)))) {
+                    pushToUrlsConsumer(link);
+                }
             }
         }
     }),

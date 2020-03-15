@@ -11,6 +11,7 @@ exports.config = {
     browserTimeout: 10,
     consumerCount: 5,
     distFolder: 'site',
+    skipLinks: false,
 };
 exports.distPath = path_1.join(exports.ROOT_FOLDER, exports.config.distFolder);
 function setConfig(newConfig = {}) {
