@@ -1,0 +1,2 @@
+- specifc url to generate
+- ignore pattern
