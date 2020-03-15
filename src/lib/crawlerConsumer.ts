@@ -30,9 +30,11 @@ export const consumer: Consumer = {
         await mkdirp(dirname(filePath));
         await writeFile(filePath, html);
 
-        for (const link of links) {
-            if (!(await pathExists(getFilePath(link)))) {
-                pushToUrlsConsumer(link);
+        if (!config.skipLinks) {
+            for (const link of links) {
+                if (!(await pathExists(getFilePath(link)))) {
+                    pushToUrlsConsumer(link);
+                }
             }
         }
     },

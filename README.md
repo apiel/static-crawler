@@ -18,3 +18,9 @@ By default it will generate the static files in a subfolder `site`. You can spec
     "distFolder": "site",
 }
 ```
+
+Static-crawler will crawl as well all the links found in the given url, till no new links are founds in the crawled pages. To skip crawling the children, for example to re-generate just one page instead of the all site, you can use `--skipLinks=true` parameter:
+
+```
+npx static-crawler http://127.0.0.1:3000/my/page --skipLinks=true
+```

@@ -31,6 +31,7 @@ Options:
   --browserTimeout=10
   --consumerCount=5
   --distFolder=site
+  --skipLinks=true
 `);
     } else {
         info('static-crawler');

@@ -12,6 +12,7 @@ export let config = {
     browserTimeout: 10,
     consumerCount: 5,
     distFolder: 'site',
+    skipLinks: false,
 };
 
 export let distPath = join(ROOT_FOLDER, config.distFolder);
