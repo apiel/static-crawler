@@ -1,5 +1,5 @@
 import { join, extname } from 'path';
-import { writeFile } from 'fs-extra';
+import { writeFile, pathExists } from 'fs-extra';
 
 import { Consumer } from './consumer';
 import { config, distPath } from './config';
@@ -16,17 +16,23 @@ const queue = { name: 'browser', maxConcurrent: config.consumerCount };
 
 export const consumer: Consumer = {
     finish: () => ({ urlsCount }),
-    picker: async () => !!urlsQueue.length && ({
-        data: urlsQueue[0],
-        apply: async () => {
-            urlsQueue.splice(0, 1);
+    picker: async () =>
+        !!urlsQueue.length && {
+            data: urlsQueue[0],
+            apply: async () => {
+                urlsQueue.splice(0, 1);
+            },
+            queue,
         },
-        queue,
-    }),
     runner: async (url: string) => {
         const { html, links } = await browse(url);
-        const filePath = getFilePath(url);
-        await writeFile(filePath, html);
+        await writeFile(getFilePath(url), html);
+
+        for (const link of links) {
+            if (!(await pathExists(getFilePath(link)))) {
+                pushToUrlsConsumer(link);
+            }
+        }
     },
 };
 
